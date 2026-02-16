@@ -1,0 +1,122 @@
+[
+  {
+    "finding_id": "f-aws-001",
+    "cloud": "aws",
+    "timestamp": "2025-01-15T06:00:00Z",
+    "resource_type": "iam_role",
+    "resource_id": "arn:aws:iam::123456789012:role/AdminRole",
+    "severity": "high",
+    "category": "excessive_permissions",
+    "description": "Role has AdministratorAccess policy attached",
+    "affected_principals": ["user/dev-user-1", "user/dev-user-2"],
+    "compliance_mapping": {
+      "iso27001": ["A.5.15", "A.5.18"],
+      "nist_csf": ["PR.AC-4", "PR.AC-6"],
+      "soc2": ["CC6.1", "CC6.3"]
+    },
+    "recommendation": {
+      "summary": "Réduire les permissions au minimum nécessaire. Ce rôle a un accès administrateur complet, ce qui viole le principe de moindre privilège.",
+      "code_fix": "aws iam detach-role-policy --role-name AdminRole --policy-arn arn:aws:iam::aws:policy/AdministratorAccess",
+      "terraform_fix": "resource \"aws_iam_role_policy_attachment\" \"admin\" {\n  # Remplacer AdministratorAccess par une policy restrictive\n  role       = aws_iam_role.admin.name\n  policy_arn = aws_iam_policy.restricted.arn\n}",
+      "risk_of_fix": "medium",
+      "auto_remediable": false
+    },
+    "remediated": false
+  },
+  {
+    "finding_id": "f-aws-002",
+    "cloud": "aws",
+    "timestamp": "2025-01-15T06:00:00Z",
+    "resource_type": "iam_user",
+    "resource_id": "arn:aws:iam::123456789012:user/old-contractor",
+    "severity": "medium",
+    "category": "dormant_account",
+    "description": "User has not logged in for 120 days",
+    "affected_principals": ["user/old-contractor"],
+    "compliance_mapping": {
+      "iso27001": ["A.5.16", "A.5.18"],
+      "nist_csf": ["PR.AC-1", "PR.AC-6"],
+      "soc2": ["CC6.1", "CC6.2"]
+    },
+    "recommendation": {
+      "summary": "Désactiver ce compte dormant. L'utilisateur ne s'est pas connecté depuis 120 jours, ce qui représente un risque de sécurité.",
+      "code_fix": "aws iam update-login-profile --user-name old-contractor --password-reset-required && aws iam delete-login-profile --user-name old-contractor",
+      "terraform_fix": null,
+      "risk_of_fix": "low",
+      "auto_remediable": true
+    },
+    "remediated": false
+  },
+  {
+    "finding_id": "f-aws-003",
+    "cloud": "aws",
+    "timestamp": "2025-01-15T06:00:00Z",
+    "resource_type": "iam_user",
+    "resource_id": "arn:aws:iam::123456789012:user/dev-user-1",
+    "severity": "high",
+    "category": "no_mfa",
+    "description": "User does not have MFA enabled",
+    "affected_principals": ["user/dev-user-1"],
+    "compliance_mapping": {
+      "iso27001": ["A.5.17"],
+      "nist_csf": ["PR.AC-7"],
+      "soc2": ["CC6.1"]
+    },
+    "recommendation": {
+      "summary": "Activer l'authentification multi-facteur (MFA) pour cet utilisateur. Sans MFA, le compte est vulnérable au vol de credentials.",
+      "code_fix": null,
+      "terraform_fix": null,
+      "risk_of_fix": "low",
+      "auto_remediable": false
+    },
+    "remediated": false
+  },
+  {
+    "finding_id": "f-azure-001",
+    "cloud": "azure",
+    "timestamp": "2025-01-15T06:05:00Z",
+    "resource_type": "service_principal",
+    "resource_id": "/subscriptions/sub-123/providers/Microsoft.Authorization/roleAssignments/ra-456",
+    "severity": "critical",
+    "category": "excessive_permissions",
+    "description": "Service principal has Owner role at subscription scope",
+    "affected_principals": ["sp/legacy-app-sp"],
+    "compliance_mapping": {
+      "iso27001": ["A.5.15", "A.5.18"],
+      "nist_csf": ["PR.AC-4"],
+      "soc2": ["CC6.1", "CC6.3"]
+    },
+    "recommendation": {
+      "summary": "Réduire les permissions de ce service principal. Le rôle Owner au niveau subscription donne un contrôle total, ce qui est excessif pour la plupart des applications.",
+      "code_fix": "az role assignment delete --assignee legacy-app-sp --role Owner --scope /subscriptions/sub-123",
+      "terraform_fix": null,
+      "risk_of_fix": "high",
+      "auto_remediable": false
+    },
+    "remediated": false
+  },
+  {
+    "finding_id": "f-gcp-001",
+    "cloud": "gcp",
+    "timestamp": "2025-01-15T06:10:00Z",
+    "resource_type": "service_account",
+    "resource_id": "projects/my-project/serviceAccounts/old-sa@my-project.iam.gserviceaccount.com",
+    "severity": "medium",
+    "category": "old_access_key",
+    "description": "Service account key is 180 days old (threshold: 90 days)",
+    "affected_principals": ["sa/old-sa"],
+    "compliance_mapping": {
+      "iso27001": ["A.5.17"],
+      "nist_csf": ["PR.AC-1"],
+      "soc2": ["CC6.1", "CC6.6"]
+    },
+    "recommendation": {
+      "summary": "Rotation de la clé de ce service account. Les clés de plus de 90 jours augmentent le risque de compromission.",
+      "code_fix": "gcloud iam service-accounts keys create new-key.json --iam-account=old-sa@my-project.iam.gserviceaccount.com",
+      "terraform_fix": null,
+      "risk_of_fix": "low",
+      "auto_remediable": true
+    },
+    "remediated": false
+  }
+]

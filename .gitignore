@@ -1,0 +1,67 @@
+# ============================================
+# IAMGuardian .gitignore
+# ============================================
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# --- IDE ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+.venv/
+venv/
+env/
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+
+# --- Terraform ---
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+.terraform.lock.hcl
+
+# --- Secrets & Credentials ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+credentials.json
+service-account*.json
+*-sa-key.json
+
+# --- Private / Internal docs ---
+CLAUDE.md
+.claude/
+config/
+*.internal.md
+lab-1-iamguardian.md
+
+# --- Logs ---
+*.log
+logs/
+
+# --- Temp ---
+tmp/
+temp/
+*.tmp
