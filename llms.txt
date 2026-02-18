@@ -1,0 +1,45 @@
+# IAMGuardian
+
+> Automated IAM permission audit and remediation across multi-cloud (AWS, Azure, GCP)
+
+## What this project does
+
+IAMGuardian scans IAM/RBAC policies across AWS, Azure, and GCP to detect:
+- Excessive permissions (AdminAccess, Owner roles)
+- Dormant accounts (no login > 90 days)
+- Missing MFA
+- Old access keys (> 90 days)
+- Privilege escalation risks
+
+It generates compliance reports mapped to ISO 27001, NIST CSF, and SOC2 frameworks.
+
+## Tech stack
+
+- Python 3.11+ (Pydantic, FastAPI)
+- Terraform (multi-cloud IaC)
+- AWS SDK (boto3), Azure SDK, GCP SDK
+- Gemini API (AI-powered remediation recommendations)
+- pytest (testing)
+
+## Core files
+
+- `src/models/finding.py` — Central data model (Finding, ComplianceMapping, Recommendation)
+- `src/storage/base_storage.py` — Abstract storage interface
+- `src/storage/local_storage.py` — JSON file storage (dev/test)
+- `src/scanners/base_scanner.py` — Abstract scanner interface
+- `src/scanners/aws_scanner.py` — AWS IAM scanner (currently mock mode)
+- `src/analyzer/iam_analyzer.py` — Statistics, compliance scoring, priority filtering
+- `src/dashboard/app.py` — FastAPI REST API
+
+## API endpoints
+
+- `GET /findings` — List findings (filters: cloud, severity)
+- `GET /findings/{id}` — Finding detail
+- `GET /stats` — Statistics by severity, cloud, category
+- `GET /compliance/{framework}` — Compliance score (iso27001, nist_csf, soc2)
+- `GET /priority` — HIGH/CRITICAL unremediated findings
+
+## Current status
+
+Phase 0-1 complete (project structure, data model, local storage, mock scanner, 23 tests passing).
+Next: Phase 2 (AWS mock scanner CLI), Phase 3 (dashboard HTML).

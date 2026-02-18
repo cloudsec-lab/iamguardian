@@ -93,7 +93,7 @@ iamguardian/
 ## Statut
 
 - [x] Phase 0 — Structure du projet
-- [ ] Phase 1 — Modèle de données + stockage local
+- [x] Phase 1 — Modèle de données + stockage local
 - [ ] Phase 2 — Scanner AWS (mode mock)
 - [ ] Phase 3 — Dashboard FastAPI local
 - [ ] Phase 4 — Scanner AWS réel (boto3)
@@ -102,9 +102,16 @@ iamguardian/
 - [ ] Phase 7 — Scanner GCP
 - [ ] Phase 8-12 — Remédiation, Terraform, CI/CD, Rapports
 
+## Documentation
+
+- [Architecture](docs/architecture.md) — Diagrammes Mermaid
+- [Backlog](docs/BACKLOG.md) — Suivi des phases et tâches
+- [Decisions](docs/DECISIONS.md) — Journal des décisions techniques
+- [Changelog](CHANGELOG.md) — Historique des changements
+
 ## Licence
 
-Code sous [Apache License 2.0](../LICENSE) — Contenu sous [CC BY-NC-SA 4.0](../LICENSE-CONTENT)
+Code sous [Apache License 2.0](LICENSE) — Contenu sous [CC BY-NC-SA 4.0](LICENSE-CONTENT)
 
 ---
 
