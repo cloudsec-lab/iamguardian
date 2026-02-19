@@ -2,121 +2,290 @@
   {
     "finding_id": "f-aws-001",
     "cloud": "aws",
-    "timestamp": "2025-01-15T06:00:00Z",
+    "timestamp": "2026-02-19T01:56:10.913360Z",
     "resource_type": "iam_role",
     "resource_id": "arn:aws:iam::123456789012:role/AdminRole",
     "severity": "high",
     "category": "excessive_permissions",
     "description": "Role has AdministratorAccess policy attached",
-    "affected_principals": ["user/dev-user-1", "user/dev-user-2"],
+    "affected_principals": [
+      "user/dev-user-1",
+      "user/dev-user-2"
+    ],
     "compliance_mapping": {
-      "iso27001": ["A.5.15", "A.5.18"],
-      "nist_csf": ["PR.AC-4", "PR.AC-6"],
-      "soc2": ["CC6.1", "CC6.3"]
+      "iso27001": [
+        "A.5.15",
+        "A.5.18"
+      ],
+      "nist_csf": [
+        "PR.AC-4",
+        "PR.AC-6"
+      ],
+      "soc2": [
+        "CC6.1",
+        "CC6.3"
+      ]
     },
     "recommendation": {
-      "summary": "Réduire les permissions au minimum nécessaire. Ce rôle a un accès administrateur complet, ce qui viole le principe de moindre privilège.",
+      "summary": "Réduire les permissions au minimum nécessaire. Ce rôle a un accès administrateur complet.",
       "code_fix": "aws iam detach-role-policy --role-name AdminRole --policy-arn arn:aws:iam::aws:policy/AdministratorAccess",
-      "terraform_fix": "resource \"aws_iam_role_policy_attachment\" \"admin\" {\n  # Remplacer AdministratorAccess par une policy restrictive\n  role       = aws_iam_role.admin.name\n  policy_arn = aws_iam_policy.restricted.arn\n}",
+      "terraform_fix": null,
       "risk_of_fix": "medium",
       "auto_remediable": false
     },
-    "remediated": false
+    "remediated": false,
+    "remediated_at": null
   },
   {
     "finding_id": "f-aws-002",
     "cloud": "aws",
-    "timestamp": "2025-01-15T06:00:00Z",
+    "timestamp": "2026-02-19T01:56:10.913360Z",
     "resource_type": "iam_user",
     "resource_id": "arn:aws:iam::123456789012:user/old-contractor",
     "severity": "medium",
     "category": "dormant_account",
     "description": "User has not logged in for 120 days",
-    "affected_principals": ["user/old-contractor"],
+    "affected_principals": [
+      "user/old-contractor"
+    ],
     "compliance_mapping": {
-      "iso27001": ["A.5.16", "A.5.18"],
-      "nist_csf": ["PR.AC-1", "PR.AC-6"],
-      "soc2": ["CC6.1", "CC6.2"]
+      "iso27001": [
+        "A.5.16",
+        "A.5.18"
+      ],
+      "nist_csf": [
+        "PR.AC-1",
+        "PR.AC-6"
+      ],
+      "soc2": [
+        "CC6.1",
+        "CC6.2"
+      ]
     },
     "recommendation": {
-      "summary": "Désactiver ce compte dormant. L'utilisateur ne s'est pas connecté depuis 120 jours, ce qui représente un risque de sécurité.",
-      "code_fix": "aws iam update-login-profile --user-name old-contractor --password-reset-required && aws iam delete-login-profile --user-name old-contractor",
+      "summary": "Désactiver ce compte dormant. L'utilisateur ne s'est pas connecté depuis 120 jours.",
+      "code_fix": "aws iam delete-login-profile --user-name old-contractor",
       "terraform_fix": null,
       "risk_of_fix": "low",
       "auto_remediable": true
     },
-    "remediated": false
+    "remediated": false,
+    "remediated_at": null
   },
   {
     "finding_id": "f-aws-003",
     "cloud": "aws",
-    "timestamp": "2025-01-15T06:00:00Z",
+    "timestamp": "2026-02-19T01:56:10.913360Z",
     "resource_type": "iam_user",
     "resource_id": "arn:aws:iam::123456789012:user/dev-user-1",
     "severity": "high",
     "category": "no_mfa",
     "description": "User does not have MFA enabled",
-    "affected_principals": ["user/dev-user-1"],
+    "affected_principals": [
+      "user/dev-user-1"
+    ],
     "compliance_mapping": {
-      "iso27001": ["A.5.17"],
-      "nist_csf": ["PR.AC-7"],
-      "soc2": ["CC6.1"]
+      "iso27001": [
+        "A.5.17"
+      ],
+      "nist_csf": [
+        "PR.AC-7"
+      ],
+      "soc2": [
+        "CC6.1"
+      ]
     },
     "recommendation": {
-      "summary": "Activer l'authentification multi-facteur (MFA) pour cet utilisateur. Sans MFA, le compte est vulnérable au vol de credentials.",
+      "summary": "Activer l'authentification multi-facteur (MFA). Sans MFA, le compte est vulnérable au vol de credentials.",
       "code_fix": null,
       "terraform_fix": null,
       "risk_of_fix": "low",
       "auto_remediable": false
     },
-    "remediated": false
+    "remediated": false,
+    "remediated_at": null
   },
   {
-    "finding_id": "f-azure-001",
-    "cloud": "azure",
-    "timestamp": "2025-01-15T06:05:00Z",
-    "resource_type": "service_principal",
-    "resource_id": "/subscriptions/sub-123/providers/Microsoft.Authorization/roleAssignments/ra-456",
-    "severity": "critical",
-    "category": "excessive_permissions",
-    "description": "Service principal has Owner role at subscription scope",
-    "affected_principals": ["sp/legacy-app-sp"],
+    "finding_id": "f-aws-004",
+    "cloud": "aws",
+    "timestamp": "2026-02-19T01:56:10.913360Z",
+    "resource_type": "access_key",
+    "resource_id": "arn:aws:iam::123456789012:user/deploy-bot/access-key/AKIA1234567890ABCDEF",
+    "severity": "medium",
+    "category": "old_access_key",
+    "description": "Access key is 185 days old (threshold: 90 days)",
+    "affected_principals": [
+      "user/deploy-bot"
+    ],
     "compliance_mapping": {
-      "iso27001": ["A.5.15", "A.5.18"],
-      "nist_csf": ["PR.AC-4"],
-      "soc2": ["CC6.1", "CC6.3"]
+      "iso27001": [
+        "A.5.17"
+      ],
+      "nist_csf": [
+        "PR.AC-1"
+      ],
+      "soc2": [
+        "CC6.1",
+        "CC6.6"
+      ]
     },
     "recommendation": {
-      "summary": "Réduire les permissions de ce service principal. Le rôle Owner au niveau subscription donne un contrôle total, ce qui est excessif pour la plupart des applications.",
-      "code_fix": "az role assignment delete --assignee legacy-app-sp --role Owner --scope /subscriptions/sub-123",
+      "summary": "Effectuer une rotation de cette clé d'accès. Les clés de plus de 90 jours augmentent le risque.",
+      "code_fix": "aws iam create-access-key --user-name deploy-bot && aws iam delete-access-key --user-name deploy-bot --access-key-id AKIA1234567890ABCDEF",
+      "terraform_fix": null,
+      "risk_of_fix": "medium",
+      "auto_remediable": true
+    },
+    "remediated": false,
+    "remediated_at": null
+  },
+  {
+    "finding_id": "f-aws-005",
+    "cloud": "aws",
+    "timestamp": "2026-02-19T01:56:10.913360Z",
+    "resource_type": "iam_policy",
+    "resource_id": "arn:aws:iam::123456789012:policy/LegacyFullAccess",
+    "severity": "critical",
+    "category": "excessive_permissions",
+    "description": "Custom policy allows Action:* on Resource:* (equivalent to admin access)",
+    "affected_principals": [
+      "role/legacy-app-role",
+      "user/qa-engineer"
+    ],
+    "compliance_mapping": {
+      "iso27001": [
+        "A.5.15",
+        "A.5.18",
+        "A.8.2"
+      ],
+      "nist_csf": [
+        "PR.AC-4",
+        "PR.AC-6"
+      ],
+      "soc2": [
+        "CC6.1",
+        "CC6.3"
+      ]
+    },
+    "recommendation": {
+      "summary": "Remplacer cette policy wildcard par des permissions spécifiques. Action:* Resource:* donne un accès total identique à AdministratorAccess.",
+      "code_fix": "aws iam create-policy-version --policy-arn arn:aws:iam::123456789012:policy/LegacyFullAccess --policy-document file://restricted-policy.json --set-as-default",
       "terraform_fix": null,
       "risk_of_fix": "high",
       "auto_remediable": false
     },
-    "remediated": false
+    "remediated": false,
+    "remediated_at": null
   },
   {
-    "finding_id": "f-gcp-001",
-    "cloud": "gcp",
-    "timestamp": "2025-01-15T06:10:00Z",
-    "resource_type": "service_account",
-    "resource_id": "projects/my-project/serviceAccounts/old-sa@my-project.iam.gserviceaccount.com",
-    "severity": "medium",
-    "category": "old_access_key",
-    "description": "Service account key is 180 days old (threshold: 90 days)",
-    "affected_principals": ["sa/old-sa"],
+    "finding_id": "f-aws-006",
+    "cloud": "aws",
+    "timestamp": "2026-02-19T01:56:10.913360Z",
+    "resource_type": "iam_role",
+    "resource_id": "arn:aws:iam::123456789012:role/DevOpsRole",
+    "severity": "high",
+    "category": "privilege_escalation",
+    "description": "Role can pass any IAM role to any service (iam:PassRole on Resource:*), enabling privilege escalation",
+    "affected_principals": [
+      "user/devops-lead",
+      "user/devops-jr"
+    ],
     "compliance_mapping": {
-      "iso27001": ["A.5.17"],
-      "nist_csf": ["PR.AC-1"],
-      "soc2": ["CC6.1", "CC6.6"]
+      "iso27001": [
+        "A.5.15",
+        "A.5.18"
+      ],
+      "nist_csf": [
+        "PR.AC-4"
+      ],
+      "soc2": [
+        "CC6.1",
+        "CC6.3"
+      ]
     },
     "recommendation": {
-      "summary": "Rotation de la clé de ce service account. Les clés de plus de 90 jours augmentent le risque de compromission.",
-      "code_fix": "gcloud iam service-accounts keys create new-key.json --iam-account=old-sa@my-project.iam.gserviceaccount.com",
+      "summary": "Restreindre iam:PassRole à des rôles spécifiques. Un PassRole sans restriction permet d'escalader ses privilèges en s'attribuant n'importe quel rôle.",
+      "code_fix": null,
+      "terraform_fix": "resource \"aws_iam_policy\" \"restricted_passrole\" {\n  statement {\n    actions   = [\"iam:PassRole\"]\n    resources = [\n      \"arn:aws:iam::123456789012:role/AllowedRole1\",\n      \"arn:aws:iam::123456789012:role/AllowedRole2\",\n    ]\n  }\n}",
+      "risk_of_fix": "medium",
+      "auto_remediable": false
+    },
+    "remediated": false,
+    "remediated_at": null
+  },
+  {
+    "finding_id": "f-aws-007",
+    "cloud": "aws",
+    "timestamp": "2026-02-19T01:56:10.913360Z",
+    "resource_type": "iam_user",
+    "resource_id": "arn:aws:iam::123456789012:user/shared-ci-user",
+    "severity": "medium",
+    "category": "shared_credentials",
+    "description": "IAM user access key is used by 3 different CI/CD pipelines (detected via CloudTrail source IP analysis)",
+    "affected_principals": [
+      "service/github-actions",
+      "service/jenkins",
+      "service/gitlab-ci"
+    ],
+    "compliance_mapping": {
+      "iso27001": [
+        "A.5.17",
+        "A.5.18"
+      ],
+      "nist_csf": [
+        "PR.AC-1",
+        "PR.AC-3"
+      ],
+      "soc2": [
+        "CC6.1",
+        "CC6.2"
+      ]
+    },
+    "recommendation": {
+      "summary": "Créer un utilisateur IAM dédié par service CI/CD. Le partage de credentials empêche la traçabilité et augmente le rayon d'impact en cas de compromission.",
+      "code_fix": "aws iam create-user --user-name github-actions-ci && aws iam create-user --user-name jenkins-ci && aws iam create-user --user-name gitlab-ci",
+      "terraform_fix": null,
+      "risk_of_fix": "medium",
+      "auto_remediable": false
+    },
+    "remediated": false,
+    "remediated_at": null
+  },
+  {
+    "finding_id": "f-aws-008",
+    "cloud": "aws",
+    "timestamp": "2026-02-19T01:56:10.913360Z",
+    "resource_type": "iam_role",
+    "resource_id": "arn:aws:iam::123456789012:role/PublicLambdaRole",
+    "severity": "critical",
+    "category": "public_access",
+    "description": "Role trust policy allows assumption from any AWS account (Principal: {\"AWS\": \"*\"})",
+    "affected_principals": [
+      "role/PublicLambdaRole"
+    ],
+    "compliance_mapping": {
+      "iso27001": [
+        "A.5.15",
+        "A.5.18",
+        "A.8.2"
+      ],
+      "nist_csf": [
+        "PR.AC-3",
+        "PR.AC-4"
+      ],
+      "soc2": [
+        "CC6.1",
+        "CC6.6"
+      ]
+    },
+    "recommendation": {
+      "summary": "Restreindre la trust policy à des comptes spécifiques. Un Principal:* permet à n'importe quel compte AWS d'assumer ce rôle.",
+      "code_fix": "aws iam update-assume-role-policy --role-name PublicLambdaRole --policy-document file://restricted-trust-policy.json",
       "terraform_fix": null,
       "risk_of_fix": "low",
-      "auto_remediable": true
+      "auto_remediable": false
     },
-    "remediated": false
+    "remediated": false,
+    "remediated_at": null
   }
 ]

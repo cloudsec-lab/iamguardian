@@ -50,6 +50,9 @@ credentials.json
 service-account*.json
 *-sa-key.json
 
+# --- Generated data ---
+data/findings.json
+
 # --- Private / Internal docs ---
 CLAUDE.md
 .claude/

@@ -139,10 +139,11 @@ class TestFindingSerialization:
             raw_data = json.load(f)
 
         findings = [Finding.model_validate(item) for item in raw_data]
-        assert len(findings) == 5
+        assert len(findings) == 8
         assert findings[0].finding_id == "f-aws-001"
-        assert findings[3].cloud == Cloud.AZURE
-        assert findings[4].cloud == Cloud.GCP
+        # Tous les findings sont AWS (scanner mock Phase 2)
+        for f in findings:
+            assert f.cloud == Cloud.AWS
 
 
 class TestComplianceMapping:
