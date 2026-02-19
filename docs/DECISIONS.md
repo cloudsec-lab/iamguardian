@@ -71,6 +71,21 @@ Historique des décisions d'architecture et choix techniques.
 
 ---
 
+## DEC-006 : Validation par enum dans les endpoints FastAPI
+
+**Date** : 2026-02-18
+**Statut** : Adopté
+
+**Contexte** : Les filtres `cloud` et `severity` de l'endpoint `GET /findings` acceptaient des `str` libres. Une valeur invalide (ex: `cloud=alibaba`) retournait silencieusement une liste vide au lieu d'une erreur.
+
+**Décision** : Utiliser les enums `Cloud` et `Severity` comme types de paramètres FastAPI.
+
+**Raison** : FastAPI valide automatiquement les valeurs enum et retourne un 422 (Unprocessable Entity) avec un message clair si la valeur n'est pas dans la liste. La documentation Swagger affiche aussi les valeurs possibles.
+
+**Conséquence** : Les comparaisons passent de `f.cloud.value == cloud` (string) à `f.cloud == cloud` (enum), ce qui est plus lisible et type-safe.
+
+---
+
 ## Voies abandonnées
 
 ### Monorepo cloudsec-lab/cloudsec-lab

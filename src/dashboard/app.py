@@ -23,7 +23,7 @@ from src.analyzer.iam_analyzer import (
     compute_stats,
     get_high_priority_findings,
 )
-from src.models.finding import Finding
+from src.models.finding import Cloud, Finding, Severity
 from src.storage.local_storage import LocalStorage
 
 # --- Initialisation de l'application ---
@@ -58,20 +58,22 @@ def root():
 
 
 @app.get("/findings", response_model=list[Finding])
-def list_findings(cloud: str | None = None, severity: str | None = None):
+def list_findings(cloud: Cloud | None = None, severity: Severity | None = None):
     """
     Lister tous les findings.
 
     Filtres optionnels :
     - cloud : aws, azure, gcp
     - severity : low, medium, high, critical
+
+    FastAPI valide automatiquement les valeurs (422 si invalide).
     """
     findings = storage.get_all_findings()
 
     if cloud:
-        findings = [f for f in findings if f.cloud.value == cloud]
+        findings = [f for f in findings if f.cloud == cloud]
     if severity:
-        findings = [f for f in findings if f.severity.value == severity]
+        findings = [f for f in findings if f.severity == severity]
 
     return findings
 

@@ -4,20 +4,32 @@
 
 ---
 
-## Sprint actuel : Phase 2 — Scanner AWS mock
+## Sprint actuel : Phase 3 — Dashboard FastAPI local
 
-**Objectif** : Scanner AWS complet avec CLI et données mockées réalistes.
+**Objectif** : Visualiser les findings dans un navigateur avec pages HTML.
 
 | Item | Statut | Notes |
 |------|--------|-------|
-| CLI `python -m src.scanners.aws_scanner --mock` | A faire | Exécutable en ligne de commande |
-| Enrichir les findings mockés (plus de scénarios) | A faire | Ajouter : privilege escalation, public access |
-| Sauvegarder les findings dans LocalStorage | A faire | Intégration scanner → stockage |
-| Tests unitaires du scanner AWS | A faire | |
+| Pages HTML avec Jinja2 | A faire | Templates pour liste, détail, stats |
+| Filtres interactifs (cloud, sévérité) | A faire | Déjà validés par enum côté API |
+| Vue détaillée d'un finding | A faire | Page HTML avec recommandation |
+| Vue conformité par framework | A faire | Score + liste des contrôles |
 
 ---
 
 ## Completed
+
+### Phase 2 — Scanner AWS mock complet (2026-02-18)
+
+- [x] CLI `python -m src.scanners.aws_scanner --mock` avec argparse
+- [x] 8 findings mockés couvrant les 7 catégories
+- [x] Intégration scanner → LocalStorage (`--save` flag)
+- [x] 28 tests unitaires scanner (basics, categories, severities, compliance, storage, CLI)
+- [x] `__main__.py` pour `python -m src.scanners`
+- [x] Résumé par sévérité dans la sortie CLI
+- [x] Review code : fix double sérialisation LocalStorage (`model_dump(mode="json")`)
+- [x] Review code : filtres dashboard avec validation enum (Cloud, Severity)
+- [x] 51 tests unitaires passants au total
 
 ### Phase 0 — Structure du projet (2026-02-16)
 
@@ -46,12 +58,6 @@
 ---
 
 ## Backlog futur
-
-### Phase 2 — Scanner AWS mock complet
-- [ ] CLI exécutable avec argparse
-- [ ] Scénarios mockés enrichis (7+ types de findings)
-- [ ] Intégration scanner → stockage automatique
-- [ ] Tests unitaires scanner
 
 ### Phase 3 — Dashboard FastAPI local
 - [ ] Pages HTML avec Jinja2 (pas juste du JSON)

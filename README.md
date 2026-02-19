@@ -94,7 +94,7 @@ iamguardian/
 
 - [x] Phase 0 — Structure du projet
 - [x] Phase 1 — Modèle de données + stockage local
-- [ ] Phase 2 — Scanner AWS (mode mock)
+- [x] Phase 2 — Scanner AWS (mode mock) — 8 findings, CLI, 51 tests
 - [ ] Phase 3 — Dashboard FastAPI local
 - [ ] Phase 4 — Scanner AWS réel (boto3)
 - [ ] Phase 5 — Analyseur IA (Gemini API)

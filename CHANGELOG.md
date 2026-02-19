@@ -8,7 +8,32 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/).
 ## [Unreleased]
 
 ### En cours
-- Phase 2 : Scanner AWS mock complet avec CLI
+- Phase 3 : Dashboard FastAPI avec pages HTML
+
+---
+
+## [0.2.0] - 2026-02-18
+
+### Ajouté
+- Scanner AWS mock complet : 8 findings couvrant les 7 catégories
+  - Permissions excessives (AdminRole + policy wildcard *)
+  - Compte dormant (120 jours sans login)
+  - Utilisateur sans MFA
+  - Access key ancienne (185 jours)
+  - Escalade de privilèges (iam:PassRole sans restriction)
+  - Credentials partagés (même clé sur 3 pipelines CI/CD)
+  - Accès public (trust policy ouverte Principal:*)
+- CLI avec argparse : `python -m src.scanners.aws_scanner --mock [--save] [--output]`
+- `__main__.py` pour exécution via `python -m src.scanners`
+- Résumé par sévérité dans la sortie CLI
+- 28 tests unitaires scanner AWS (basics, categories, severities, compliance, storage, CLI)
+
+### Amélioré
+- `LocalStorage._save` : suppression double sérialisation (`model_dump(mode="json")` au lieu de `json.loads(model_dump_json())`)
+- Dashboard `/findings` : filtres `cloud` et `severity` utilisent les enums `Cloud` et `Severity` pour validation automatique FastAPI (422 si valeur invalide)
+
+### Stats
+- 51 tests unitaires passants (modèles: 10, stockage: 13, scanner: 28)
 
 ---
 

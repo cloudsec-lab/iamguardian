@@ -52,10 +52,7 @@ class LocalStorage(BaseStorage):
 
     def _save(self, findings: list[Finding]) -> None:
         """Écrire tous les findings dans le fichier JSON."""
-        data = [
-            json.loads(f.model_dump_json())
-            for f in findings
-        ]
+        data = [f.model_dump(mode="json") for f in findings]
         self._file_path.write_text(
             json.dumps(data, indent=2, ensure_ascii=False),
             encoding="utf-8",

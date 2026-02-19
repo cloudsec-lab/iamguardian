@@ -41,5 +41,8 @@ It generates compliance reports mapped to ISO 27001, NIST CSF, and SOC2 framewor
 
 ## Current status
 
-Phase 0-1 complete (project structure, data model, local storage, mock scanner, 23 tests passing).
-Next: Phase 2 (AWS mock scanner CLI), Phase 3 (dashboard HTML).
+Phase 0-2 complete. 51 tests passing.
+- Phase 0: Project structure, data model, local storage, FastAPI skeleton
+- Phase 2: AWS mock scanner (8 findings, 7 categories), CLI with argparse, LocalStorage integration
+- Code review applied: model_dump(mode="json") serialization, enum-based API filters
+Next: Phase 3 (dashboard HTML with Jinja2).
