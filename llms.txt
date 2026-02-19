@@ -29,20 +29,30 @@ It generates compliance reports mapped to ISO 27001, NIST CSF, and SOC2 framewor
 - `src/scanners/base_scanner.py` — Abstract scanner interface
 - `src/scanners/aws_scanner.py` — AWS IAM scanner (currently mock mode)
 - `src/analyzer/iam_analyzer.py` — Statistics, compliance scoring, priority filtering
-- `src/dashboard/app.py` — FastAPI REST API
+- `src/dashboard/app.py` — FastAPI web dashboard + JSON API
+- `src/dashboard/templates/` — Jinja2 HTML templates (6 pages)
+- `src/dashboard/static/css/style.css` — Custom CSS (badges, metrics, filters)
 
-## API endpoints
+## Web pages (browser)
 
-- `GET /findings` — List findings (filters: cloud, severity)
-- `GET /findings/{id}` — Finding detail
+- `GET /` — Dashboard overview (stats + priority findings)
+- `GET /findings` — Findings list with cloud/severity filters
+- `GET /findings/{id}` — Finding detail with compliance + recommendation
 - `GET /stats` — Statistics by severity, cloud, category
 - `GET /compliance/{framework}` — Compliance score (iso27001, nist_csf, soc2)
-- `GET /priority` — HIGH/CRITICAL unremediated findings
+
+## JSON API (programmatic)
+
+- `GET /api/findings` — List findings (enum-validated filters, 422 on invalid)
+- `GET /api/findings/{id}` — Finding detail
+- `GET /api/stats` — Statistics
+- `GET /api/compliance/{framework}` — Compliance score
+- `GET /api/priority` — HIGH/CRITICAL unremediated findings
 
 ## Current status
 
-Phase 0-2 complete. 51 tests passing.
-- Phase 0: Project structure, data model, local storage, FastAPI skeleton
-- Phase 2: AWS mock scanner (8 findings, 7 categories), CLI with argparse, LocalStorage integration
-- Code review applied: model_dump(mode="json") serialization, enum-based API filters
-Next: Phase 3 (dashboard HTML with Jinja2).
+Phase 0-3 complete. 78 tests passing.
+- Phase 0: Project structure, data model, local storage
+- Phase 2: AWS mock scanner (8 findings, 7 categories), CLI with argparse
+- Phase 3: Dashboard web (Jinja2 + Pico.css), API under /api/, 27 dashboard tests
+Next: Phase 4 (real AWS scanner with boto3).

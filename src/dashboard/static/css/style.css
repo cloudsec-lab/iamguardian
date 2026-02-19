@@ -1,0 +1,99 @@
+/* IAMGuardian — Styles personnalisés */
+
+/* Métriques (cartes d'overview) */
+.metric-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 0;
+}
+
+.metric-label {
+    font-size: 0.9rem;
+    color: var(--pico-muted-color);
+    margin-top: 0.25rem;
+}
+
+.metric-critical { color: #dc2626; }
+.metric-high { color: #ea580c; }
+.metric-ok { color: #16a34a; }
+
+/* Score conformité */
+.score-container {
+    text-align: center;
+    padding: 1rem;
+}
+
+.score-value {
+    font-size: 4rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 0;
+}
+
+/* Badges */
+.badge {
+    display: inline-block;
+    padding: 0.15em 0.5em;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: white;
+    white-space: nowrap;
+}
+
+/* Sévérité */
+.badge-critical { background-color: #dc2626; }
+.badge-high { background-color: #ea580c; }
+.badge-medium { background-color: #d97706; }
+.badge-low { background-color: #16a34a; }
+
+/* Cloud */
+.badge-aws { background-color: #ff9900; }
+.badge-azure { background-color: #0078d4; }
+.badge-gcp { background-color: #4285f4; }
+
+/* Statut */
+.badge-remediated { background-color: #16a34a; }
+.badge-pending { background-color: #6b7280; }
+
+/* Compliance */
+.badge-compliance {
+    background-color: #6366f1;
+    margin: 0.1em;
+}
+
+/* Barre de filtres */
+.filter-bar {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+    align-items: center;
+}
+
+.filter-bar a {
+    display: inline-block;
+    padding: 0.3em 0.8em;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    border: 1px solid var(--pico-muted-border-color);
+    color: var(--pico-color);
+}
+
+.filter-bar a:hover {
+    border-color: var(--pico-primary);
+    color: var(--pico-primary);
+}
+
+.filter-bar a.active {
+    background: var(--pico-primary);
+    color: white;
+    border-color: var(--pico-primary);
+}
+
+.filter-separator {
+    color: var(--pico-muted-color);
+}

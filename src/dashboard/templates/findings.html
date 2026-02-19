@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Findings — IAMGuardian{% endblock %}
+
+{% block content %}
+<h1>Findings</h1>
+
+<div class="filter-bar">
+    <a href="/findings" {% if not active_cloud and not active_severity %}class="active"{% endif %}>Tous</a>
+    <span class="filter-separator">|</span>
+    {% for c in clouds %}
+    <a href="/findings?cloud={{ c }}{% if active_severity %}&severity={{ active_severity }}{% endif %}"
+       {% if active_cloud == c %}class="active"{% endif %}>
+        {{ c | upper }}
+    </a>
+    {% endfor %}
+    <span class="filter-separator">|</span>
+    {% for s in severities %}
+    <a href="/findings?severity={{ s }}{% if active_cloud %}&cloud={{ active_cloud }}{% endif %}"
+       {% if active_severity == s %}class="active badge-{{ s }}"{% endif %}>
+        {{ severity_labels.get(s, s) }}
+    </a>
+    {% endfor %}
+</div>
+
+{% if findings %}
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Cloud</th>
+            <th>S&eacute;v&eacute;rit&eacute;</th>
+            <th>Cat&eacute;gorie</th>
+            <th>Ressource</th>
+            <th>Statut</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for f in findings %}
+        <tr>
+            <td><a href="/findings/{{ f.finding_id }}">{{ f.finding_id }}</a></td>
+            <td><span class="badge badge-{{ f.cloud.value }}">{{ f.cloud.value | upper }}</span></td>
+            <td><span class="badge badge-{{ f.severity.value }}">{{ severity_labels.get(f.severity.value, f.severity.value) }}</span></td>
+            <td>{{ category_labels.get(f.category.value, f.category.value) }}</td>
+            <td><code>{{ f.resource_id | truncate(50) }}</code></td>
+            <td>
+                {% if f.remediated %}
+                <span class="badge badge-remediated">Corrig&eacute;</span>
+                {% else %}
+                <span class="badge badge-pending">En attente</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<p><small>{{ findings | length }} finding(s) affich&eacute;(s)</small></p>
+{% else %}
+<article>
+    <p>Aucun finding ne correspond aux filtres s&eacute;lectionn&eacute;s.</p>
+</article>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Conformit&eacute; {{ framework_labels.get(framework, framework) }} — IAMGuardian{% endblock %}
+
+{% block content %}
+<h1>Conformit&eacute;</h1>
+
+<div class="filter-bar">
+    {% for fw in frameworks %}
+    <a href="/compliance/{{ fw }}" {% if framework == fw %}class="active"{% endif %}>
+        {{ framework_labels.get(fw, fw) }}
+    </a>
+    {% endfor %}
+</div>
+
+<article>
+    <div class="score-container">
+        <p class="score-value
+            {% if compliance.score >= 80 %}metric-ok
+            {% elif compliance.score >= 50 %}metric-high
+            {% else %}metric-critical
+            {% endif %}">
+            {{ compliance.score }}%
+        </p>
+        <p class="metric-label">Score {{ framework_labels.get(framework, framework) }}</p>
+        <progress value="{{ compliance.total_remediated }}" max="{{ compliance.total_issues }}"></progress>
+        <p><small>{{ compliance.total_remediated }} / {{ compliance.total_issues }} probl&egrave;mes corrig&eacute;s</small></p>
+    </div>
+</article>
+
+{% if compliance.controls %}
+<h2>Contr&ocirc;les</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Contr&ocirc;le</th>
+            <th>Probl&egrave;mes</th>
+            <th>Corrig&eacute;s</th>
+            <th>Findings associ&eacute;s</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for control_id, control in compliance.controls.items() %}
+        <tr>
+            <td><strong>{{ control_id }}</strong></td>
+            <td>{{ control.total }}</td>
+            <td>{{ control.remediated }}</td>
+            <td>
+                {% for fid in control.findings %}
+                <a href="/findings/{{ fid }}">{{ fid }}</a>{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<article>
+    <p>Aucun contr&ocirc;le trouv&eacute; pour ce framework.</p>
+</article>
+{% endif %}
+{% endblock %}

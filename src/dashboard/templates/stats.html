@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}Statistiques — IAMGuardian{% endblock %}
+
+{% block content %}
+<h1>Statistiques</h1>
+
+{% if stats.total == 0 %}
+<article>
+    <p>Aucune donn&eacute;e disponible. Lancez un scan d'abord.</p>
+    <pre><code>python -m src.scanners.aws_scanner --mock --save</code></pre>
+</article>
+{% else %}
+
+<div class="grid">
+    <article>
+        <p class="metric-value">{{ stats.total }}</p>
+        <p class="metric-label">Total</p>
+    </article>
+    <article>
+        <p class="metric-value metric-ok">{{ stats.remediated }}</p>
+        <p class="metric-label">Rem&eacute;di&eacute;s</p>
+    </article>
+    <article>
+        <p class="metric-value metric-critical">{{ stats.pending }}</p>
+        <p class="metric-label">En attente</p>
+    </article>
+</div>
+
+<h2>Par s&eacute;v&eacute;rit&eacute;</h2>
+<table>
+    <thead>
+        <tr>
+            <th>S&eacute;v&eacute;rit&eacute;</th>
+            <th>Nombre</th>
+            <th>Proportion</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for sev in ["critical", "high", "medium", "low"] %}
+        {% set count = stats.by_severity.get(sev, 0) %}
+        {% if count > 0 %}
+        <tr>
+            <td><span class="badge badge-{{ sev }}">{{ severity_labels.get(sev, sev) }}</span></td>
+            <td>{{ count }}</td>
+            <td>
+                <progress value="{{ count }}" max="{{ stats.total }}"></progress>
+            </td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>Par cloud</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Cloud</th>
+            <th>Nombre</th>
+            <th>Proportion</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cloud, count in stats.by_cloud.items() %}
+        <tr>
+            <td><span class="badge badge-{{ cloud }}">{{ cloud | upper }}</span></td>
+            <td>{{ count }}</td>
+            <td>
+                <progress value="{{ count }}" max="{{ stats.total }}"></progress>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>Par cat&eacute;gorie</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Cat&eacute;gorie</th>
+            <th>Nombre</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cat, count in stats.by_category.items() %}
+        <tr>
+            <td>{{ category_labels.get(cat, cat) }}</td>
+            <td>{{ count }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endif %}
+{% endblock %}

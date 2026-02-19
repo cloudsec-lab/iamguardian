@@ -62,7 +62,10 @@ pip install -r requirements.txt
 # 4. Lancer les tests
 pytest tests/ -v
 
-# 5. Lancer le dashboard (Phase 3+)
+# 5. Générer des données de test
+python -m src.scanners.aws_scanner --mock --save
+
+# 6. Lancer le dashboard → http://localhost:8000
 uvicorn src.dashboard.app:app --reload
 ```
 
@@ -75,7 +78,9 @@ iamguardian/
 │   ├── scanners/        # Scanners IAM (AWS, Azure, GCP)
 │   ├── analyzer/        # Analyse et statistiques
 │   ├── storage/         # Stockage (local JSON → Firestore)
-│   └── dashboard/       # API FastAPI
+│   └── dashboard/       # Dashboard web + API JSON
+│       ├── templates/   # Pages HTML (Jinja2)
+│       └── static/css/  # Styles CSS
 ├── tests/               # Tests unitaires (pytest)
 ├── data/                # Données de test
 ├── docs/                # Documentation et diagrammes
@@ -95,7 +100,7 @@ iamguardian/
 - [x] Phase 0 — Structure du projet
 - [x] Phase 1 — Modèle de données + stockage local
 - [x] Phase 2 — Scanner AWS (mode mock) — 8 findings, CLI, 51 tests
-- [ ] Phase 3 — Dashboard FastAPI local
+- [x] Phase 3 — Dashboard FastAPI local — Jinja2, filtres, conformité, 78 tests
 - [ ] Phase 4 — Scanner AWS réel (boto3)
 - [ ] Phase 5 — Analyseur IA (Gemini API)
 - [ ] Phase 6 — Scanner Azure

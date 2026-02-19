@@ -8,7 +8,30 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/).
 ## [Unreleased]
 
 ### En cours
-- Phase 3 : Dashboard FastAPI avec pages HTML
+- Phase 4 : Scanner AWS réel (boto3)
+
+---
+
+## [0.3.0] - 2026-02-19
+
+### Ajouté
+- Dashboard web complet avec Jinja2 + Pico.css
+  - Page d'accueil avec métriques et findings prioritaires
+  - Liste des findings avec filtres combinables (cloud + sévérité)
+  - Détail d'un finding : métadonnées, conformité, recommandation, code fix
+  - Statistiques par sévérité, cloud, catégorie avec barres de progression
+  - Score de conformité par framework (ISO 27001, NIST CSF, SOC 2)
+  - Empty state avec instructions quand aucune donnée
+- API JSON sous `/api/` (findings, stats, compliance, priority)
+- CSS personnalisé : badges colorés (sévérité, cloud, statut), métriques, filtres
+- Labels français pour sévérités, catégories, frameworks (globals Jinja2)
+- Filtre `format_dt` pour formatage des dates
+- Constante `VALID_FRAMEWORKS` (DRY)
+- 27 tests dashboard (pages HTML + API JSON + empty state)
+- Dépendances : jinja2, httpx
+
+### Stats
+- 78 tests unitaires passants (modèles: 10, stockage: 13, scanner: 28, dashboard: 27)
 
 ---
 

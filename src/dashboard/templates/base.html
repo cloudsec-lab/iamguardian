@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}IAMGuardian{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <nav class="container-fluid">
+        <ul>
+            <li><strong>IAMGuardian</strong></li>
+        </ul>
+        <ul>
+            <li><a href="/">Dashboard</a></li>
+            <li><a href="/findings">Findings</a></li>
+            <li><a href="/stats">Statistiques</a></li>
+            <li><a href="/compliance/iso27001">Conformit&eacute;</a></li>
+            <li><a href="/docs" target="_blank">API</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="container">
+        <hr>
+        <small>IAMGuardian v0.2.0 &mdash; Audit et rem&eacute;diation IAM multi-cloud</small>
+    </footer>
+</body>
+</html>

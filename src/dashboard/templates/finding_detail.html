@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block title %}{{ finding.finding_id }} — IAMGuardian{% endblock %}
+
+{% block content %}
+<hgroup>
+    <h1>{{ finding.finding_id }}</h1>
+    <p>{{ finding.description }}</p>
+</hgroup>
+
+<div class="grid">
+    <article>
+        <p class="metric-label">Cloud</p>
+        <p><span class="badge badge-{{ finding.cloud.value }}">{{ finding.cloud.value | upper }}</span></p>
+    </article>
+    <article>
+        <p class="metric-label">S&eacute;v&eacute;rit&eacute;</p>
+        <p><span class="badge badge-{{ finding.severity.value }}">{{ severity_labels.get(finding.severity.value, finding.severity.value) }}</span></p>
+    </article>
+    <article>
+        <p class="metric-label">Cat&eacute;gorie</p>
+        <p>{{ category_labels.get(finding.category.value, finding.category.value) }}</p>
+    </article>
+    <article>
+        <p class="metric-label">Statut</p>
+        <p>
+            {% if finding.remediated %}
+            <span class="badge badge-remediated">Corrig&eacute;</span>
+            {% if finding.remediated_at %}
+            <br><small>{{ finding.remediated_at | format_dt }}</small>
+            {% endif %}
+            {% else %}
+            <span class="badge badge-pending">En attente</span>
+            {% endif %}
+        </p>
+    </article>
+</div>
+
+<h2>Ressource</h2>
+<table>
+    <tr>
+        <th>Type</th>
+        <td>{{ finding.resource_type.value }}</td>
+    </tr>
+    <tr>
+        <th>Identifiant</th>
+        <td><code>{{ finding.resource_id }}</code></td>
+    </tr>
+    <tr>
+        <th>D&eacute;tect&eacute; le</th>
+        <td>{{ finding.timestamp | format_dt }}</td>
+    </tr>
+</table>
+
+{% if finding.affected_principals %}
+<h2>Principals affect&eacute;s</h2>
+<ul>
+    {% for p in finding.affected_principals %}
+    <li><code>{{ p }}</code></li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<h2>Conformit&eacute;</h2>
+<div class="grid">
+    <article>
+        <h3>ISO 27001</h3>
+        {% if finding.compliance_mapping.iso27001 %}
+        {% for c in finding.compliance_mapping.iso27001 %}
+        <span class="badge badge-compliance">{{ c }}</span>
+        {% endfor %}
+        {% else %}
+        <small>Aucun contr&ocirc;le</small>
+        {% endif %}
+    </article>
+    <article>
+        <h3>NIST CSF</h3>
+        {% if finding.compliance_mapping.nist_csf %}
+        {% for c in finding.compliance_mapping.nist_csf %}
+        <span class="badge badge-compliance">{{ c }}</span>
+        {% endfor %}
+        {% else %}
+        <small>Aucun contr&ocirc;le</small>
+        {% endif %}
+    </article>
+    <article>
+        <h3>SOC 2</h3>
+        {% if finding.compliance_mapping.soc2 %}
+        {% for c in finding.compliance_mapping.soc2 %}
+        <span class="badge badge-compliance">{{ c }}</span>
+        {% endfor %}
+        {% else %}
+        <small>Aucun contr&ocirc;le</small>
+        {% endif %}
+    </article>
+</div>
+
+{% if finding.recommendation %}
+<h2>Recommandation</h2>
+<article>
+    <p>{{ finding.recommendation.summary }}</p>
+
+    <div class="grid">
+        <div>
+            <small>Risque du fix</small><br>
+            <span class="badge badge-{{ finding.recommendation.risk_of_fix }}">{{ finding.recommendation.risk_of_fix }}</span>
+        </div>
+        <div>
+            <small>Auto-rem&eacute;diable</small><br>
+            {% if finding.recommendation.auto_remediable %}
+            <span class="badge badge-remediated">Oui</span>
+            {% else %}
+            <span class="badge badge-pending">Non</span>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if finding.recommendation.code_fix %}
+    <h3>Commande CLI</h3>
+    <pre><code>{{ finding.recommendation.code_fix }}</code></pre>
+    {% endif %}
+
+    {% if finding.recommendation.terraform_fix %}
+    <h3>Terraform</h3>
+    <pre><code>{{ finding.recommendation.terraform_fix }}</code></pre>
+    {% endif %}
+</article>
+{% endif %}
+
+<p><a href="/findings">&larr; Retour aux findings</a></p>
+{% endblock %}

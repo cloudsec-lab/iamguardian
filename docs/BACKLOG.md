@@ -1,23 +1,41 @@
 # IAMGuardian — Backlog
 
-> Dernière mise à jour : 2026-02-18
+> Dernière mise à jour : 2026-02-19
 
 ---
 
-## Sprint actuel : Phase 3 — Dashboard FastAPI local
+## Sprint actuel : Phase 4 — Scanner AWS réel (boto3)
 
-**Objectif** : Visualiser les findings dans un navigateur avec pages HTML.
+**Objectif** : Se connecter à un vrai compte AWS et scanner les IAM policies.
 
 | Item | Statut | Notes |
 |------|--------|-------|
-| Pages HTML avec Jinja2 | A faire | Templates pour liste, détail, stats |
-| Filtres interactifs (cloud, sévérité) | A faire | Déjà validés par enum côté API |
-| Vue détaillée d'un finding | A faire | Page HTML avec recommandation |
-| Vue conformité par framework | A faire | Score + liste des contrôles |
+| Compte AWS créé + MFA + alertes budget | A faire | Prérequis |
+| AWS CLI configuré | A faire | `aws configure` |
+| Vrais appels boto3 dans AwsScanner | A faire | Remplacer `_mock_scan()` |
+| IAM Access Analyzer API | A faire | Optionnel |
+| Détection : users sans MFA, access keys > 90j | A faire | Scénarios réels |
 
 ---
 
 ## Completed
+
+### Phase 3 — Dashboard FastAPI local (2026-02-19)
+
+- [x] 6 templates Jinja2 : base, index, findings, finding_detail, stats, compliance
+- [x] CSS personnalisé : badges sévérité/cloud, métriques, filtres, score conformité
+- [x] Page dashboard / avec vue d'ensemble (stats + findings prioritaires)
+- [x] Page /findings avec filtres interactifs (cloud, sévérité) combinables
+- [x] Page /findings/{id} avec détail complet, conformité, recommandation + code fix
+- [x] Page /stats avec stats par sévérité, cloud, catégorie + progress bars
+- [x] Page /compliance/{framework} avec score, contrôles, liens vers findings
+- [x] API JSON déplacée sous /api/ (findings, stats, compliance, priority)
+- [x] Labels FR pour sévérités, catégories, frameworks
+- [x] Filtre `format_dt` pour dates, constante `VALID_FRAMEWORKS`
+- [x] Empty state : message d'aide quand aucun finding
+- [x] 27 tests dashboard (HTML pages + API JSON + empty state)
+- [x] 78 tests unitaires passants au total, 0 warnings
+- [x] Dépendances ajoutées : jinja2, httpx
 
 ### Phase 2 — Scanner AWS mock complet (2026-02-18)
 
@@ -58,12 +76,6 @@
 ---
 
 ## Backlog futur
-
-### Phase 3 — Dashboard FastAPI local
-- [ ] Pages HTML avec Jinja2 (pas juste du JSON)
-- [ ] Filtres interactifs (cloud, sévérité)
-- [ ] Vue détaillée d'un finding
-- [ ] Vue conformité par framework
 
 ### Phase 4 — Scanner AWS réel (boto3)
 - [ ] Compte AWS créé + MFA + alertes budget

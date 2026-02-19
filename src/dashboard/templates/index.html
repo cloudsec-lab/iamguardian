@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — IAMGuardian{% endblock %}
+
+{% block content %}
+<h1>Dashboard</h1>
+
+{% if findings_count == 0 %}
+<article>
+    <h2>Aucun finding d&eacute;tect&eacute;</h2>
+    <p>Lancez un scan pour commencer :</p>
+    <pre><code>python -m src.scanners.aws_scanner --mock --save</code></pre>
+    <p>Puis rechargez cette page.</p>
+</article>
+{% else %}
+
+<div class="grid">
+    <article>
+        <p class="metric-value">{{ stats.total }}</p>
+        <p class="metric-label">Findings totaux</p>
+    </article>
+    <article>
+        <p class="metric-value metric-critical">{{ stats.by_severity.get("critical", 0) }}</p>
+        <p class="metric-label">Critiques</p>
+    </article>
+    <article>
+        <p class="metric-value metric-high">{{ stats.by_severity.get("high", 0) }}</p>
+        <p class="metric-label">&Eacute;lev&eacute;s</p>
+    </article>
+    <article>
+        <p class="metric-value metric-ok">{{ stats.remediated }}</p>
+        <p class="metric-label">Rem&eacute;di&eacute;s</p>
+    </article>
+</div>
+
+{% if priority %}
+<h2>Findings prioritaires</h2>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>S&eacute;v&eacute;rit&eacute;</th>
+            <th>Cat&eacute;gorie</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for f in priority %}
+        <tr>
+            <td><a href="/findings/{{ f.finding_id }}">{{ f.finding_id }}</a></td>
+            <td><span class="badge badge-{{ f.severity.value }}">{{ severity_labels.get(f.severity.value, f.severity.value) }}</span></td>
+            <td>{{ category_labels.get(f.category.value, f.category.value) }}</td>
+            <td>{{ f.description[:80] }}{% if f.description|length > 80 %}...{% endif %}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+<div class="grid">
+    <a href="/findings" role="button">Voir tous les findings</a>
+    <a href="/stats" role="button" class="outline">Statistiques</a>
+    <a href="/compliance/iso27001" role="button" class="outline">Conformit&eacute;</a>
+</div>
+
+{% endif %}
+{% endblock %}
